@@ -366,6 +366,8 @@ void PageConverterPrivate::beginPage(int & actualPage, bool & first) {
 	actualPage++;
 }
 
+#include <algorithm>
+
 void PageConverterPrivate::endPage(bool actual, bool hasHeaderFooter) {
 	if(hasHeaderFooter && actual) {
 
@@ -415,6 +417,8 @@ void PageConverterPrivate::endPage(bool actual, bool hasHeaderFooter) {
 		painter->translate(0, -spacing);
 		QWebPrinter wp(headers[logicalPage-1]->mainFrame(), printer, *painter);
 		painter->translate(0,-wp.elementLocation(headers[logicalPage-1]->mainFrame()->findFirstElement("body")).second.height());
+
+		headerHeight = std::max(headerHeight,wp.elementLocation(headers[logicalPage-1]->mainFrame()->findFirstElement("body")).second.height() * printer->heightMM() / printer->height());
 		wp.spoolPage(1);
 		painter->restore();
 	}
@@ -425,6 +429,7 @@ void PageConverterPrivate::endPage(bool actual, bool hasHeaderFooter) {
 		double spacing = settings.footer.spacing * printer->height() / printer->heightMM();
 		painter->translate(0, printer->height()+ spacing);
 		QWebPrinter wp(footers[logicalPage-1]->mainFrame(), printer, *painter);
+		footerHeight = std::max(footerHeight,wp.elementLocation(footers[logicalPage-1]->mainFrame()->findFirstElement("body")).second.height() * printer->heightMM() / printer->height());
 		wp.spoolPage(1);
 		painter->restore();
 	}
@@ -432,13 +437,14 @@ void PageConverterPrivate::endPage(bool actual, bool hasHeaderFooter) {
 }
 #endif
 
-
+#include <iostream>
 void PageConverterPrivate::printPage(bool ok) {
 	if (!ok) {
 		fail();
 		return;
 	}
-
+	headerHeight = 0;
+	footerHeight = 0;
 #ifndef __EXTENSIVE_WKHTMLTOPDF_QT_HACK__
 	currentPhase = 1;
 	emit outer.phaseChanged();
@@ -450,7 +456,7 @@ void PageConverterPrivate::printPage(bool ok) {
  	int actualPage=1;
  	int cc=settings.collate?settings.copies:1;
  	int pc=settings.collate?1:settings.copies;
-	
+
 	bool hasHeaderFooter = 
 		settings.header.line || settings.footer.line ||
 		!settings.header.left.isEmpty() || !settings.footer.left.isEmpty() ||
@@ -563,8 +569,9 @@ void PageConverterPrivate::printPage(bool ok) {
 	emit outer.phaseChanged();
 	convertionDone = true;
 	emit outer.finished(true);
-	
-  qApp->exit(0); // quit qt's event handling
+	std::cout << "HeaderHeight=" << headerHeight << std::endl;
+	std::cout << "FooterHeight=" << footerHeight << std::endl;
+	qApp->exit(0); // quit qt's event handling
 }
 
 #ifdef __EXTENSIVE_WKHTMLTOPDF_QT_HACK__

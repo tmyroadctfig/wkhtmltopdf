@@ -62,6 +62,9 @@ private:
 	int tocPages;
 
 	bool convertionDone;
+	double headerHeight;
+	double footerHeight;
+
 
 #ifdef __EXTENSIVE_WKHTMLTOPDF_QT_HACK__
 	MultiPageLoader hfLoader;
