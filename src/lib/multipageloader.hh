@@ -15,7 +15,7 @@
 // along with wkhtmltopdf.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef __MULTIPAGELOADER_HH__
 #define __MULTIPAGELOADER_HH__
-#include "settings.hh"
+#include <wkhtmltopdf/settings.hh>
 #include <QFile>
 #include <QObject>
 #include <QUrl>

@@ -13,26 +13,37 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with wkhtmltopdf.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef __COMMMAND_LINE_PARSER_HH__
-#define __COMMMAND_LINE_PARSER_HH__
-#include "settings.hh"
-#include <cstdio>
+#ifndef __PAGECONVERTER_HH__
+#define __PAGECONVERTER_HH__
+#include <wkhtmltopdf/settings.hh>
+#include <QObject>
 
-class CommandLineParserPrivate;
-
-/*! \brief The class is responcible for parsing command line information
-*/
-class CommandLineParser {
+class PageConverterPrivate;
+class PageConverter: public QObject {
+	Q_OBJECT
 public:
-	CommandLineParser(Settings & settings);
-	~CommandLineParser();
-	void version(FILE * fd) const;
-	void usage(FILE * fd, bool extended) const;
-	void manpage(FILE * fd) const;
-	void readme(FILE * fd, bool html) const;
-	void loadDefaults();
-	void parseArguments(int argc, const char ** argv, bool final=false);
+	PageConverter(Settings & settings);
+	~PageConverter();
+	int phaseCount();
+	int currentPhase();
+	QString phaseDescription(int phase=-1);
+	QString progressString();
+	int httpErrorCode();
+	void addResource(const QString & url);
+	const Settings & settings() const;
+signals:
+	void warning(const QString & message);
+	void error(const QString & message);
+	void phaseChanged();
+	void progressChanged(int progress);
+	void finished(bool ok);
+public slots:
+	void beginConvertion();
+	bool convert();
+	void cancel();
 private:
-	CommandLineParserPrivate * d;
+	PageConverterPrivate * d;
+	friend class PageConverterPrivate;
 };
-#endif //__COMMMAND_LINE_PARSER_HH__
+
+#endif //__PAGECONVERTER_HH__

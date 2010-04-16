@@ -19,7 +19,7 @@
 #include <cstdio>
 #include <QString>
 #include "commandlineparser.hh"
-#include "settings.hh"
+#include <wkhtmltopdf/settings.hh>
 
 class CommandLineParserPrivate;
 

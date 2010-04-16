@@ -17,7 +17,7 @@
 #define __TEXTUALFEEDBACK_P_HH__
 #include "multipageloader.hh"
 #include "outline.hh"
-#include "pageconverter.hh"
+#include <wkhtmltopdf/pageconverter.hh>
 #include "tempfile.hh"
 #include "tocprinter.hh"
 #include <QAtomicInt>

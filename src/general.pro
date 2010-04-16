@@ -13,25 +13,28 @@
 # You should have received a copy of the GNU General Public License
 # along with wkhtmltopdf.  If not, see <http:#www.gnu.org/licenses/>.
 # 
-TEMPLATE = subdirs
-SUBDIRS = src
-CONFIG += ordered
-readme.target=README
-readme.commands=./wkhtmltopdf --readme > README
-readme.depends=sub-src-all-ordered
 
-QMAKE_EXTRA_UNIX_TARGETS += readme
+DEFINES += MAJOR_VERSION=0 MINOR_VERSION=9 PATCH_VERSION=5 BUILD=""
 
-unix {
-    man.target=wkhtmltopdf.1.gz
-    man.commands=./wkhtmltopdf --manpage | gzip > $@
-    man.depends=sub-src-all-ordered
+TEMP = $$[QT_INSTALL_LIBS] libQtGui.prl
+PRL  = $$[QT_INSTALL_LIBS] QtGui.framework/QtGui.prl
+include($$join(TEMP, "/"))
+include($$join(PRL, "/"))
 
-    manins.target=manins
-    manins.depends=man
-    manins.files=wkhtmltopdf.1.gz
-    manins.path=$$INSTALLBASE/share/man/man1
-
-    QMAKE_EXTRA_UNIX_TARGETS += manins man
-    INSTALLS += manins
+contains(QMAKE_PRL_CONFIG, shared) {
+    DEFINES += QT_SHARED
+} else {
+    DEFINES += QT_STATIC
 }
+QTPLUGIN += qjpeg qgif qtiff qmng
+
+QT += webkit network
+DESTDIR=../..
+
+MOC_DIR = ../../.obj/$$OBJ_DIR
+OBJECTS_DIR = ../../.obj/$$OBJ_DIR
+UI_DIR = ../../.obj/$$OBJ_DIR
+
+INCLUDEPATH += ../../include/
+
+

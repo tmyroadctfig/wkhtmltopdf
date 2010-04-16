@@ -14,9 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with wkhtmltopdf.  If not, see <http://www.gnu.org/licenses/>.
 #include "commandlineparser.hh"
-#include "pageconverter.hh"
+#include <wkhtmltopdf/pageconverter.hh>
 #include "progressfeedback.hh"
-#include "settings.hh"
+#include <wkhtmltopdf/settings.hh>
 #include <QCleanlooksStyle>
 #include <QCommonStyle>
 #include <QPainter>

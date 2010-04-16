@@ -13,37 +13,22 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with wkhtmltopdf.  If not, see <http://www.gnu.org/licenses/>.
-#ifndef __PAGECONVERTER_HH__
-#define __PAGECONVERTER_HH__
-#include "settings.hh"
-#include <QObject>
+#ifndef __PROGRESSFEEDBACK_HH__
+#define __PROGRESSFEEDBACK_HH__
+#include <wkhtmltopdf/pageconverter.hh>
 
-class PageConverterPrivate;
-class PageConverter: public QObject {
+class ProgressFeedback: public QObject {
 	Q_OBJECT
 public:
-	PageConverter(Settings & settings);
-	~PageConverter();
-	int phaseCount();
-	int currentPhase();
-	QString phaseDescription(int phase=-1);
-	QString progressString();
-	int httpErrorCode();
-	void addResource(const QString & url);
-	const Settings & settings() const;
-signals:
-	void warning(const QString & message);
-	void error(const QString & message);
+	PageConverter & pageConverter;
+	int lw;
+public slots:
+	void warning(const QString &message);
+	void error(const QString &message);
 	void phaseChanged();
 	void progressChanged(int progress);
-	void finished(bool ok);
-public slots:
-	void beginConvertion();
-	bool convert();
-	void cancel();
-private:
-	PageConverterPrivate * d;
-	friend class PageConverterPrivate;
+public:
+	ProgressFeedback(PageConverter & _);
 };
 
-#endif //__PAGECONVERTER_HH__
+#endif //__PROGRESSFEEDBACK_HH__

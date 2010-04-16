@@ -15,7 +15,7 @@
 // along with wkhtmltopdf.  If not, see <http://www.gnu.org/licenses/>.
 #include "tocprinter.hh"
 #include "outline_p.hh"
-#include "settings.hh"
+#include <wkhtmltopdf/settings.hh>
 #ifdef __EXTENSIVE_WKHTMLTOPDF_QT_HACK__
 
 

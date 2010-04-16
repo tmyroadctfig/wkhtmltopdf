@@ -12,26 +12,21 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with wkhtmltopdf.  If not, see <http:#www.gnu.org/licenses/>.
-# 
-TEMPLATE = subdirs
-SUBDIRS = src
-CONFIG += ordered
-readme.target=README
-readme.commands=./wkhtmltopdf --readme > README
-readme.depends=sub-src-all-ordered
+TEMPLATE = app
+OBJ_DIR=app
+include(../general.pro)
 
-QMAKE_EXTRA_UNIX_TARGETS += readme
 
-unix {
-    man.target=wkhtmltopdf.1.gz
-    man.commands=./wkhtmltopdf --manpage | gzip > $@
-    man.depends=sub-src-all-ordered
+LIBS += ../../libwkhtmltopdf.so
+HEADERS += progressfeedback.hh
+SOURCES += wkhtmltopdf.cc arguments.cc commandlineparser.cc \
+           docparts.cc outputter.cc manoutputter.cc \
+	   htmloutputter.cc textoutputter.cc progressfeedback.cc
 
-    manins.target=manins
-    manins.depends=man
-    manins.files=wkhtmltopdf.1.gz
-    manins.path=$$INSTALLBASE/share/man/man1
-
-    QMAKE_EXTRA_UNIX_TARGETS += manins man
-    INSTALLS += manins
+TARGET=wkhtmltopdf
+win32 {
+    CONFIG += console
 }
+
+INSTALLS += target
+target.path=$$INSTALLBASE/bin
