@@ -17,7 +17,7 @@ OBJ_DIR=app
 include(../general.pro)
 
 
-LIBS += ../../libwkhtmltopdf.so
+LIBS += -L../../ -lwkhtmltopdf
 HEADERS += progressfeedback.hh
 SOURCES += wkhtmltopdf.cc arguments.cc commandlineparser.cc \
            docparts.cc outputter.cc manoutputter.cc \

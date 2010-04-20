@@ -18,7 +18,7 @@
 #include <QWebFrame>
 #ifdef  __EXTENSIVE_WKHTMLTOPDF_QT_HACK__
 #include <QWebElement>
-#include "settings.hh"
+#include <wkhtmltopdf/settings.hh>
 
 class OutlinePrivate;
 
