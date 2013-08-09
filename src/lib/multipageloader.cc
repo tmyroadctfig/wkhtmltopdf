@@ -86,9 +86,40 @@ QNetworkReply * MyNetworkAccessManager::createRequest(Operation op, const QNetwo
 		foreach (const HT & j, settings.customHeaders)
 			r3.setRawHeader(j.first.toAscii(), j.second.toAscii());
 	}
-	return QNetworkAccessManager::createRequest(op, r3, outgoingData);
+	
+	QNetworkReply* reply = QNetworkAccessManager::createRequest(op, r3, outgoingData);
+	if (settings.loadDelay > 0)
+	{
+		new NetworkReplyTimeout(settings, reply);
+	}
+	return reply;
 }
 
+NetworkReplyTimeout::NetworkReplyTimeout(const settings::LoadPage & settings, QNetworkReply * reply) {  
+	this->reply = reply;  
+	timeoutTimer = new QTimer(this);
+	timeoutTimer->setSingleShot(false);
+
+	connect(timeoutTimer, SIGNAL(timeout()), this, SLOT(timeout()));
+	connect(reply, SIGNAL(finished()), this, SLOT(stop()));
+	connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this->timeoutTimer, SLOT(start()));
+
+	timeoutTimer->setInterval(settings.loadDelay);
+	timeoutTimer->start();
+}
+
+NetworkReplyTimeout::~NetworkReplyTimeout() {
+	delete timeoutTimer;
+}
+
+void NetworkReplyTimeout::timeout() {
+	timeoutTimer->stop();
+	reply->abort();
+}
+
+void NetworkReplyTimeout::stop() {
+	timeoutTimer->stop();
+}
 
 MyQWebPage::MyQWebPage(ResourceObject & res): resource(res) {}
 

@@ -53,6 +53,19 @@ signals:
 	void warning(const QString & text);
 };
 
+class DLL_LOCAL NetworkReplyTimeout: public QObject {
+	Q_OBJECT
+private:
+	QTimer * timeoutTimer;
+	QNetworkReply * reply;
+public:
+	NetworkReplyTimeout(const settings::LoadPage & settings, QNetworkReply * reply);
+	~NetworkReplyTimeout();
+public slots:
+	void timeout();
+	void stop();
+};
+
 class DLL_LOCAL MultiPageLoaderPrivate;
 class DLL_LOCAL ResourceObject;
 

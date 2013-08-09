@@ -109,6 +109,9 @@ struct DLL_PUBLIC LoadPage {
 	LoadErrorHandling loadErrorHandling;
 	LoadErrorHandling mediaLoadErrorHandling;
 
+	//! How many milliseconds should we wait when grabbing remote resources
+	int loadDelay;
+
 	//! Proxy related settings
 	Proxy proxy;
 
