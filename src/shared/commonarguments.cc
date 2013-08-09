@@ -219,6 +219,8 @@ void CommandLineParserBase::addPageLoadArgs(LoadPage & s) {
 
 	addarg("disable-local-file-access", 0, "Do not allowed conversion of a local file to read in other local files, unless explicitly allowed with --allow", new ConstSetter<bool>(s.blockLocalFileAccess, true));
 	addarg("enable-local-file-access", 0, "Allowed conversion of a local file to read in other local files.", new ConstSetter<bool>(s.blockLocalFileAccess, false));
+	addarg("disable-remote-access", 0, "Do not allowed conversion of a local file to read in remote resources.", new ConstSetter<bool>(s.blockRemoteAccess, true));
+	addarg("enable-remote-access", 0, "Allowed conversion of a local file to read in remote resources.", new ConstSetter<bool>(s.blockRemoteAccess, false));
 	addarg("allow", 0, "Allow the file or files from the specified folder to be loaded (repeatable)", new StringListSetter(s.allowed,"path"));
 
 	addarg("cache-dir", 0, "Web cache directory", new QStrSetter(s.cacheDir,"path"));

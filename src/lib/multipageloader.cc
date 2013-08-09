@@ -80,6 +80,13 @@ QNetworkReply * MyNetworkAccessManager::createRequest(Operation op, const QNetwo
 			return QNetworkAccessManager::createRequest(op, r2, outgoingData);
 		}
 	}
+	else if (req.url().scheme() != "file" && settings.blockRemoteAccess) {		
+		QNetworkRequest r2 = req;
+		emit warning(QString("Blocked access to url %1").arg(req.url().toString()));
+		r2.setUrl(QUrl("about:blank"));
+		return QNetworkAccessManager::createRequest(op, r2, outgoingData);
+	}
+	
 	QNetworkRequest r3 = req;
 	if (settings.repeatCustomHeaders) {
 		typedef QPair<QString, QString> HT;

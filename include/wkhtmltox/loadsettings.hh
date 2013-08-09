@@ -96,6 +96,9 @@ struct DLL_PUBLIC LoadPage {
 	//! Block access to local files for the given page
 	bool blockLocalFileAccess;
 
+	//! Block access to remote resources for the given page
+	bool blockRemoteAccess;
+
 	//! If access to local files is not allowed in general, allow it for these files
 	QList< QString > allowed;
 
